@@ -6,14 +6,7 @@ import safety_program_creator as spc
 
 import os
 
-while True:
-    try:
-        from app import db
-        break
-    except:
-        pass
-
-
+#from app import db
 
 
 class Safety_Program(db.Model):
