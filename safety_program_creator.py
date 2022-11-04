@@ -17,7 +17,7 @@ import os
 #     "127.0.0.1", "60000"
 # )
 
-import win32com.client
+# import win32com.client
 
 # import inspect, os
 
@@ -27,12 +27,12 @@ def findPath(file_name):
     abs_file_path = os.path.join(script_dir, rel_path)
     return abs_file_path
 
-def update_toc(docx_file):
-    word = win32com.client.DispatchEx("Word.Application")
-    doc = word.Documents.Open(docx_file)
-    doc.TablesOfContents(1).Update()
-    doc.Close(SaveChanges=True)
-    word.Quit()
+# def update_toc(docx_file):
+#     word = win32com.client.DispatchEx("Word.Application")
+#     doc = word.Documents.Open(docx_file)
+#     doc.TablesOfContents(1).Update()
+#     doc.Close(SaveChanges=True)
+#     word.Quit()
 
 def DocumentBytes(doc):
     file_stream = io.BytesIO()
