@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Safety Manual Creator</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+
+      <div class="vertical_spacer">
+        <div class="center_parent">
+          <div class="center_child">
+            <h1>Safety Manual Creator</h1>  
+            <br>
+            <form>
+              <input type="search" id="company_name" name="q"
+              placeholder="Enter Company Name...">
+            </form>
+            <br>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="horizontal_aligner center_parent"> 
+
+          <div class="center_child" id="btn_container_left">
+            <button class="create_btn" onclick="generateDocument(true)">
+              Create Safety Manual
+            </button>
+<!--            <br>-->
+<!--            <button id="sm_download" class="create_btn">-->
+<!--              Download Safety Manual-->
+<!--            </button>-->
+          </div>
+
+          <div class="center_child" id="btn_container_right">
+            <button class="create_btn" onclick="generateDocument(false)")>
+              Create Safety Program
+            </button>
+<!--            <br>-->
+<!--            <p id="sp_download" style="display: none;">-->
+<!--              <a href="">Download Safety Program</a>-->
+<!--            </p>-->
+          </div>
+
+        </div>
+
+        <br>
+        <br>
+
+        <div class="horizontal_aligner center_parent">
+          
+          <div class="center_child" id="form_container_left">
+            <form id="form" role="search">
+              <input type="search" id="nonselected_query" onkeyup="searchNonSelected()" name="q"
+              placeholder="Search Non Selected..."
+              aria-label="Search through site content">
+            </form>
+
+            <ol id="unselected_parent">
+              <!-- buttons go here -->
+            </ol>
+
+          </div>
+
+          <div class="center_child" id="form_container_right">
+            <form id="form" role="search">
+              <input type="search" id="selected_query" onkeyup="searchSelected()" name="q"
+              placeholder="Search Selected..."
+              aria-label="Search through site content">
+            </form>
+
+            <ol id="selected_parent">
+              <!-- buttons go here -->
+            </ol>
+            
+          </div>
+          
+        </div>
+      </div>
+
+    </main>
+    <script src="static/index.js"></script>
+  </body>
+</html>
