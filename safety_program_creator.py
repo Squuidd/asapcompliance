@@ -10,6 +10,7 @@ import io
 
 import types
 
+from docx2pdf import convert
 import os
 
 # import field_updater
@@ -20,6 +21,11 @@ import os
 # import win32com.client
 
 # import inspect, os
+
+def createPDF(start_path):
+    size = len(start_path)
+    pdf_name = f"{start_path[:size - 5]}.pdf"
+    convert(start_path, f"Output/{pdf_name}")
 
 def findPath(file_name):
     script_dir = os.path.dirname(__file__)  # absolute dir the script is in
@@ -116,6 +122,8 @@ def create_program(
                 DocumentBytes(main_document)
             ]
         )
+
+            
     return zip_files(docs).getvalue()
 
 def zip_files(files):
