@@ -10,7 +10,10 @@ import io
 
 import types
 
-from docx2pdf import convert
+import pythoncom
+import win32com.client
+import tempfile
+
 import os
 
 # import field_updater
@@ -22,10 +25,6 @@ import os
 
 # import inspect, os
 
-def createPDF(start_path):
-    size = len(start_path)
-    pdf_name = f"{start_path[:size - 5]}.pdf"
-    convert(start_path, f"Output/{pdf_name}")
 
 def findPath(file_name):
     script_dir = os.path.dirname(__file__)  # absolute dir the script is in
@@ -39,6 +38,76 @@ def findPath(file_name):
 #     doc.TablesOfContents(1).Update()
 #     doc.Close(SaveChanges=True)
 #     word.Quit()
+
+class Tempdoc():
+    def __init__(self, data: bytes, filetype: str = "docx", word=None):
+        if not word:
+            word = self.word_instance()
+            self.word_given = False # need to close word if it wasnt given
+        else:
+            self.word_given = True
+
+        self.path = self.make_temp(data, filetype)
+        self.doc = word.Documents.Open(self.path)
+
+        self.word = word
+
+        # This is msword monkey business
+        self.format = {
+            "docx": 16,
+            "pdf": 17
+        }
+
+    @staticmethod
+    def word_instance():
+        pythoncom.CoInitialize()
+        word = win32com.client.DispatchEx("Word.Application")
+        return word
+
+    def make_temp(self, data, filetype):
+        Counter = 0
+        TEMPPATH = tempfile.gettempdir()
+        while True:
+            path = f"{TEMPPATH}\\{str(Counter)}.{filetype}"
+            try:
+                with open(path, 'wb') as f:
+                    f.write(data)
+                break
+            except:
+                Counter += 1
+        return path
+
+    def save_as(self, _format="pdf"):
+        # Good idea to make an empty file and overwrite later
+        path = self.make_temp(b"", _format)
+
+        self.doc.SaveAs(
+            path,
+            FileFormat=self.format[_format]
+        )
+        return self.read(path)
+
+    def save(self):
+        self.doc.Close(SaveChanges=True)
+        return self.read(self.path)
+
+    def read(self, path):
+        with open(path) as f:
+            data = f.buffer.read()
+        return data
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        try:
+            self.doc.Close()
+            os.remove(self.path)
+        except:
+            pass
+
+        if not self.word_given:
+            self.word.Quit()
 
 def DocumentBytes(doc):
     file_stream = io.BytesIO()
@@ -88,25 +157,17 @@ def create_manual(
 
     main_document.render(ctx)  # Render
 
-    
-
-    # updates TOC *windows only*
-    # script_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-    # file_name = save_path
-    # file_path = os.path.join(script_dir, file_name)
-    # update_toc(file_path)
-
-    #doc = update_toc(path)
-
-    # print(etree.tostring(main_document.element.body, encoding='unicode', pretty_print=True))
-    return DocumentBytes(main_document) # doc was main_document
-
+    with Tempdoc(DocumentBytes(main_document)) as td:
+        td.doc.TablesOfContents(1).Update()
+        b = td.save()
+    return b
 
 def create_program(
         files: list,  # TODO Should maybe be bytes
         company_name: str
 ):
     docs = []
+    wd = Tempdoc.word_instance() # slow to reopen and close word repeatedly
     for file in files:
         main_document = DocxTemplate(file)
 
@@ -116,11 +177,23 @@ def create_program(
 
         main_document.render(ctx)
 
+        # docx
+        data = DocumentBytes(main_document)
         docs.append(
             [
                 os.path.basename(file),
-                DocumentBytes(main_document)
-            ]
+                data
+            ],
+        )
+
+        # pdf
+        with Tempdoc(data) as td:
+            data_pdf = td.save_as("pdf")
+        docs.append(
+            [
+                os.path.basename(file)[:-4] + "pdf",
+                data_pdf
+            ],
         )
 
             
