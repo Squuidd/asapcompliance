@@ -8,7 +8,7 @@ import re
 import io
 
 import pythoncom
-import win32com.client
+# import win32com.client
 import tempfile
 
 import os
