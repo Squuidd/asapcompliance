@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/3fd8edfb-371b-4bde-ab95-1df15f787403/appservices/subscriptions/3fd8edfb-371b-4bde-ab95-1df15f787403/resourceGroups/asapcompliance/providers/Microsoft.Web/sites/asapcompliance",
+    "appService.deploySubpath": "."
+}

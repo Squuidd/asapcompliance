@@ -101,7 +101,7 @@ def findPath(file_name):
     rel_path = f"Safety Programs/{file_name}"
     abs_file_path = os.path.join(script_dir, rel_path)
     return abs_file_path
-
+    
 
 # turn a document into byte string
 def DocumentBytes(doc):
