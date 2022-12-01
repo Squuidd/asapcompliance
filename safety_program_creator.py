@@ -166,10 +166,11 @@ def create_manual(
 
     main_document.render(ctx)  # Render
 
-    with Tempdoc(DocumentBytes(main_document)) as td:
-        td.doc.TablesOfContents(1).Update()
-        b = td.save()
-    return b
+    # with Tempdoc(DocumentBytes(main_document)) as td:
+    #     td.doc.TablesOfContents(1).Update()
+    #     b = td.save()
+    # return b
+    return DocumentBytes(main_document)
 
 
 def create_program(
