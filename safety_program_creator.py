@@ -7,8 +7,8 @@ from lxml import etree
 import re
 import io
 
-#import pythoncom
-# import win32com.client
+import pythoncom
+import win32com.client
 import tempfile
 
 import os
@@ -36,11 +36,11 @@ class Tempdoc():
         }
 
     # Create msword instance
-    # @staticmethod
-    # def word_instance():
-    #     #pythoncom.CoInitialize()
-    #     word = win32com.client.DispatchEx("Word.Application")
-    #     return word
+    @staticmethod
+    def word_instance():
+        pythoncom.CoInitialize()
+        word = win32com.client.DispatchEx("Word.Application")
+        return word
 
     # Create a temporary file in windows temp folder.
     def make_temp(self, data, filetype):
@@ -166,11 +166,10 @@ def create_manual(
 
     main_document.render(ctx)  # Render
 
-    # with Tempdoc(DocumentBytes(main_document)) as td:
-    #     td.doc.TablesOfContents(1).Update()
-    #     b = td.save()
-    # return b
-    return DocumentBytes(main_document)
+    with Tempdoc(DocumentBytes(main_document)) as td:
+        td.doc.TablesOfContents(1).Update()
+        b = td.save()
+    return b
 
 
 def create_program(
