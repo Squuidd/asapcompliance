@@ -7,7 +7,7 @@ from lxml import etree
 import re
 import io
 
-import pythoncom
+#import pythoncom
 import win32com.client
 import tempfile
 
@@ -38,7 +38,7 @@ class Tempdoc():
     # Create msword instance
     @staticmethod
     def word_instance():
-        pythoncom.CoInitialize()
+        #pythoncom.CoInitialize()
         word = win32com.client.DispatchEx("Word.Application")
         return word
 
