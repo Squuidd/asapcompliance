@@ -8,7 +8,7 @@ import re
 import io
 
 #import pythoncom
-import win32com.client
+# import win32com.client
 import tempfile
 
 import os
@@ -36,11 +36,11 @@ class Tempdoc():
         }
 
     # Create msword instance
-    @staticmethod
-    def word_instance():
-        #pythoncom.CoInitialize()
-        word = win32com.client.DispatchEx("Word.Application")
-        return word
+    # @staticmethod
+    # def word_instance():
+    #     #pythoncom.CoInitialize()
+    #     word = win32com.client.DispatchEx("Word.Application")
+    #     return word
 
     # Create a temporary file in windows temp folder.
     def make_temp(self, data, filetype):
