@@ -200,7 +200,7 @@ def create_program(
         )
 
         # produce a pdf from data bytes
-        with Tempdoc(data) as td:
+        with Tempdoc(data, word=wd) as td:
             data_pdf = td.save("pdf")
         # append to zip
         docs.append(
@@ -209,5 +209,6 @@ def create_program(
                 data_pdf
             ],
         )
+    wd.Quit()
 
     return zip_files(docs).getvalue()
