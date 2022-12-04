@@ -75,9 +75,16 @@ def parse_db():
         # print(program.name)
     return docs
 
-update_db()
-db.create_all()
-db.session.commit()
+#update_db()
+with app.app_context():
+    update_db()
+    db.create_all()
+    db.session.commit()
+    
+#session = db.session
+
+# db.create_all()
+# db.session.commit()
 
 
 
