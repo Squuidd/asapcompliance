@@ -1,25 +1,34 @@
 import safety_program_creator as spc
-from os import listdir
+import os 
 from os.path import isfile, join
 
 chosen_files_path = "Chosen Programs"
-onlyfiles = [f for f in listdir(chosen_files_path) if isfile(join(chosen_files_path, f))]
+# onlyfiles = [f for f in listdir(chosen_files_path) if isfile(join(chosen_files_path, f))]
 
-manual_bytes = spc.create_manual(file=spc.findPath("safety_manual.docx"), safety_documents=[f"Chosen Programs\\{onlyfiles[0]}"], company_name="Test")
+chosen_files = [os.path.join(r,file) for r,d,f in os.walk(chosen_files_path) for file in f]
+company_name = input("Company Name: ")
+choice = input("1 Safety Manual\n2 Safety Programs and PDFs\n3 Both\n")
 
-with open("Chosen Programs\\new.docx", "wb") as f:
-    f.write(manual_bytes)
+def generate_file(bytes, extension):
+    with open(f"Output\\{company_name}_manual.{extension}", "wb") as f:
+        f.write(bytes)
 
-#program_bytes = spc.create_program([f"Chosen Programs\\{onlyfiles[0]}"], company_name="Test")
-# print(manual_bytes)
+if choice == '1':
+    manual_bytes = spc.create_manual(file=spc.findPath("safety_manual.docx"), safety_documents=chosen_files, company_name=company_name)
+    generate_file(manual_bytes, "docx")
+elif choice == '2':
+    program_bytes = spc.create_program(files=chosen_files, company_name=company_name)
+    generate_file(program_bytes, "zip")
+else: 
+    program_bytes = spc.create_program(files=chosen_files, company_name=company_name)
+    generate_file(program_bytes, "zip")
+    manual_bytes = spc.create_manual(file=spc.findPath("safety_manual.docx"), safety_documents=chosen_files, company_name=company_name)
+    generate_file(manual_bytes, "docx")
 
-# with open(manual_bytes, mode="rb") as f:
-#     file = f.read()
 
-# with spc.Tempdoc(file) as doc:
-#     bytes = doc.save(".docx")
 
-# with open("Chosen Programs\\new.docx", "wb") as binary_file:
-#     binary_file.write(file)
+
+
+
 
 
