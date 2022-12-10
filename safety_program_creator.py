@@ -46,6 +46,7 @@ class Tempdoc():
     def make_temp(self, data, filetype):
         Counter = 0
         TEMPPATH = tempfile.gettempdir()
+
         while True:
             path = f"{TEMPPATH}\\{str(Counter)}.{filetype}"
             try:
@@ -66,7 +67,7 @@ class Tempdoc():
         if _format:
             # Need to make a new temp file if we are going to save as a different format
             path = self.make_temp(b"", _format)
-
+            
             self.doc.SaveAs(
                 path,
                 FileFormat=self.format[_format]
@@ -134,8 +135,8 @@ class DummyDoc(Subdoc):
 
 
 def create_manual(
-        file,
-        safety_documents,
+        file, # is the safety manual file
+        safety_documents : list,
         company_name
 ):
     main_document = DocxTemplate(file)
@@ -209,5 +210,5 @@ def create_program(
             ],
         )
     wd.Quit()
-
+    
     return zip_files(docs).getvalue()
